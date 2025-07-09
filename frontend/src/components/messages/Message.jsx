@@ -7,7 +7,7 @@ const Message = ({ message }) => {
      const { authUser } = useAuthContext();
      const { selectedConversation } = useConversation();
 
-     const fromMe = message?.senderId?.toString() === authUser._id?.toString(); // ✅ FIXED COMPARISON
+     const fromMe = String(message.senderId) === String(authUser._id); // ✅ This handles ObjectId vs string
      const formattedTime = extractTime(message.createdAt);
      const chatClassName = fromMe ? "chat-end" : "chat-start";
      const profilePic = fromMe ? authUser.profilePic : selectedConversation?.profilePic;
