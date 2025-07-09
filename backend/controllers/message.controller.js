@@ -8,6 +8,7 @@ export const sendMessage = async (req, res) => {
           const { id: receiverId } = req.params;
           const senderId = req.user._id;
 
+          // Find or create conversation
           let conversation = await Conversation.findOne({
                participants: { $all: [senderId, receiverId] },
           });
@@ -18,29 +19,33 @@ export const sendMessage = async (req, res) => {
                });
           }
 
+          // Create new message
           const newMessage = new Message({
                senderId,
                receiverId,
                message,
           });
 
+          // Add message to conversation
           if (newMessage) {
                conversation.messages.push(newMessage._id);
           }
 
-          // await conversation.save();
-          // await newMessage.save();
-
-          // this will run in parallel
+          // Save both in parallel
           await Promise.all([conversation.save(), newMessage.save()]);
 
-          // SOCKET IO FUNCTIONALITY WILL GO HERE
+          // ✅ SOCKET.IO - Emit message to both receiver and sender
           const receiverSocketId = getReceiverSocketId(receiverId);
+          const senderSocketId = getReceiverSocketId(senderId);
+
           if (receiverSocketId) {
-               // io.to(<socket_id>).emit() used to send events to specific client
                io.to(receiverSocketId).emit("newMessage", newMessage);
           }
+          if (senderSocketId) {
+               io.to(senderSocketId).emit("newMessage", newMessage);
+          }
 
+          // ✅ Send back response to frontend
           res.status(201).json(newMessage);
      } catch (error) {
           console.log("Error in sendMessage controller: ", error.message);
@@ -55,7 +60,7 @@ export const getMessages = async (req, res) => {
 
           const conversation = await Conversation.findOne({
                participants: { $all: [senderId, userToChatId] },
-          }).populate("messages"); // NOT REFERENCE BUT ACTUAL MESSAGES
+          }).populate("messages");
 
           if (!conversation) return res.status(200).json([]);
 
