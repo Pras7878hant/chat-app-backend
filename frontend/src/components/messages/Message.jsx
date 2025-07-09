@@ -7,11 +7,12 @@ const Message = ({ message }) => {
      const { authUser } = useAuthContext();
      const { selectedConversation } = useConversation();
 
-     const fromMe = String(message.senderId) === String(authUser._id); // ✅ This handles ObjectId vs string
+     // ✅ Ensure both IDs are strings for proper comparison
+     const fromMe = message.senderId.toString() === authUser._id.toString();
      const formattedTime = extractTime(message.createdAt);
      const chatClassName = fromMe ? "chat-end" : "chat-start";
      const profilePic = fromMe ? authUser.profilePic : selectedConversation?.profilePic;
-     const bubbleBgColor = fromMe ? "bg-blue-500" : "bg-gray-700";
+     const bubbleBgColor = fromMe ? "bg-blue-500" : "";
      const shakeClass = message.shouldShake ? "shake" : "";
 
      return (
