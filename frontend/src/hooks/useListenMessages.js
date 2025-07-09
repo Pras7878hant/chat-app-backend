@@ -8,17 +8,18 @@ const useListenMessages = () => {
 	const { setMessages } = useConversation();
 
 	useEffect(() => {
-		if (!socket) return;
-
-		const handleNewMessage = (newMessage) => {
+		const handler = (newMessage) => {
 			newMessage.shouldShake = true;
-			new Audio(notificationSound).play();
-			setMessages((prev) => [...prev, newMessage]); // ✅ reactive update
+
+			const sound = new Audio(notificationSound);
+			sound.play();
+
+			setMessages((prevMessages) => [...prevMessages, newMessage]);
 		};
 
-		socket.on("newMessage", handleNewMessage);
+		socket?.on("newMessage", handler);
 
-		return () => socket.off("newMessage", handleNewMessage);
+		return () => socket?.off("newMessage", handler);
 	}, [socket, setMessages]);
 };
 
