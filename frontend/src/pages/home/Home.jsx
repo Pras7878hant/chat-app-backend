@@ -9,11 +9,11 @@ const Home = () => {
      const navigate = useNavigate();
 
      const handleLogout = () => {
-          localStorage.removeItem("user");
-          localStorage.removeItem("userId");
+          localStorage.removeItem("chat-user"); // ✅ updated
           setAuthUser(null);
           navigate("/login");
      };
+
 
      return (
           <div className='flex flex-col gap-4 items-center sm:h-[550px]'>
