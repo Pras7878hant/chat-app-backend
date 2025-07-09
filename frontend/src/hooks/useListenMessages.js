@@ -8,6 +8,7 @@ const useListenMessages = () => {
 	const { setMessages } = useConversation();
 
 	useEffect(() => {
+		console.log("Socket listen activated");
 		const handler = (newMessage) => {
 			newMessage.shouldShake = true;
 
