@@ -16,7 +16,7 @@ export const signup = async (req, res) => {
 			return res.status(400).json({ error: "Username already exists" });
 		}
 
-		// HASH PASSWORD HERE
+		// HASH PASSWORD code
 		const salt = await bcrypt.genSalt(10);
 		const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -34,7 +34,7 @@ export const signup = async (req, res) => {
 		});
 
 		if (newUser) {
-			// Generate JWT token here
+			// Generate JWT token 
 			generateTokenAndSetCookie(newUser._id, res);
 			await newUser.save();
 

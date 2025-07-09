@@ -5,8 +5,7 @@ import express from "express";
 
 const app = express();
 const server = http.createServer(app);
-
-// ✅ CORS allowed origins for local + deployed frontend
+//cors code 
 const io = new Server(server, {
      cors: {
           origin: ["http://localhost:5173", "https://chat-app-yt.onrender.com"],
@@ -15,7 +14,7 @@ const io = new Server(server, {
      },
 });
 
-const userSocketMap = {}; // { userId: socketId }
+const userSocketMap = {};
 
 export const getReceiverSocketId = (receiverId) => {
      return userSocketMap[receiverId];
@@ -24,7 +23,7 @@ export const getReceiverSocketId = (receiverId) => {
 io.on("connection", (socket) => {
      console.log("🔌 User connected:", socket.id);
 
-     // ✅ Read userId from `auth`, not query
+     // ✅ Read userId from `auth`
      const userId = socket.handshake.auth.userId;
 
      if (userId && userId !== "undefined") {

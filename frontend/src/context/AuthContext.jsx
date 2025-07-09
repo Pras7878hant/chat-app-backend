@@ -7,15 +7,15 @@ export const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
 	const [authUser, setAuthUser] = useState(null);
 
-	// Ensure consistent localStorage key
+
 	useEffect(() => {
-		const storedUser = localStorage.getItem('chat-user'); // ✅ match with SocketContext
+		const storedUser = localStorage.getItem('chat-user');
 		if (storedUser) {
 			setAuthUser(JSON.parse(storedUser));
 		}
 	}, []);
 
-	// Also update localStorage whenever authUser changes
+
 	useEffect(() => {
 		if (authUser) {
 			localStorage.setItem('chat-user', JSON.stringify(authUser));
@@ -29,5 +29,4 @@ export const AuthContextProvider = ({ children }) => {
 	);
 };
 
-// ✅ Hook to access AuthContext
 export const useAuthContext = () => useContext(AuthContext);

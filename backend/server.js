@@ -44,7 +44,7 @@ app.get('/ping', (req, res) => {
      res.send('pong');
 });
 
-// ✅ Wildcard route for frontend SPA
+
 app.get("*", (req, res) => {
      res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 });

@@ -23,9 +23,8 @@ const useLogin = () => {
 				throw new Error(data.error);
 			}
 
-			// ✅ Save to localStorage for persistence across refresh
 			localStorage.setItem("user", JSON.stringify(data));
-			localStorage.setItem("userId", data._id); // for socket auth
+			localStorage.setItem("userId", data._id);
 			setAuthUser(data);
 		} catch (error) {
 			toast.error(error.message);
